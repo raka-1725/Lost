@@ -9,64 +9,112 @@ public class MovementController : MonoBehaviour
     [SerializeField] float mMaxMoveSpeed = 2f;
     [SerializeField] float mGroundMoveSpeedAccelaration = 50f;
     [SerializeField] float mAirMoveSpeedAccelaration = 5f;
+    [SerializeField] float mTurnLerpRate = 40f;
     [SerializeField] float mMaxFallSpeed = 50f;
+    [SerializeField] float mAirCheckRadius = .2f;
+    [SerializeField] LayerMask mAirCheckLayerMask = 1;
 
-    private PlayerInputActions mPlayerInputAction;
+
     private CharacterController mCharacterController;
     private Vector3 mVerticalVelocity;
     private Vector3 mHorizontalVelocity;
     private Vector2 mMoveInput;
 
+    private bool mShouldTryJump;
+    private bool mIsInAir;
+
+    private Animator mAnimator;
+
+
     private void Awake()
     {
-        mPlayerInputAction = new PlayerInputActions();
-        mPlayerInputAction.Gameplay.Jump.performed += PerformJump;
-
-        mPlayerInputAction.Gameplay.Move.performed += HandleMoveInput;
-        mPlayerInputAction.Gameplay.Move.canceled += HandleMoveInput;
-
         mCharacterController = GetComponent<CharacterController>();
-        
+        mAnimator = GetComponent<Animator>();
     }
-    private void HandleMoveInput(InputAction.CallbackContext context) 
+    public void HandleMoveInput(InputAction.CallbackContext context) 
     {
         mMoveInput = context.ReadValue<Vector2>();
-        Debug.Log($"Move input is : {mMoveInput}");
+        //Debug.Log($"Move input is : {mMoveInput}");
     }
-    private void PerformJump(InputAction.CallbackContext context) 
+    public void PerformJump(InputAction.CallbackContext context) 
     {
-        Debug.Log("JUMP");
+        //Debug.Log("JUMP");
 
-        if (mCharacterController.isGrounded) 
+        if (!mIsInAir) 
         {
-            mVerticalVelocity.y = mJumpSpeed;
+            mShouldTryJump = true;
         }
     }
 
-    private void OnEnable()
+    bool IsInAir() 
     {
-        mPlayerInputAction.Enable();
+        if (mCharacterController.isGrounded) 
+        {
+            return false;
+        }
+
+        Collider[] airCheckColliders = Physics.OverlapSphere(transform.position, mAirCheckRadius, mAirCheckLayerMask);
+        foreach (Collider collider in airCheckColliders)
+        {
+            if (collider.gameObject != gameObject) 
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    private void OnDisable()
-    {
-        mPlayerInputAction.Disable();
-    }
-
-    private void Start()
-    {
-    }
 
     private void Update()
     {
-        if (mVerticalVelocity.y > -mMaxFallSpeed) 
+        mIsInAir = IsInAir();
+
+        UpdateVerticalVelocity();
+        UpdateHorizontalVelocity();
+
+        UpdateTransform();
+        UpdateAnimation();
+        Debug.Log($"is grounded: {mCharacterController.isGrounded}");
+    }
+
+    private void UpdateAnimation()
+    {
+        mAnimator.SetFloat("Speed", mHorizontalVelocity.magnitude);
+        mAnimator.SetBool("Landed", !mIsInAir);
+    }
+
+    private void UpdateTransform()
+    {
+        mCharacterController.Move((mHorizontalVelocity + mVerticalVelocity) * Time.deltaTime);
+        if (mHorizontalVelocity.sqrMagnitude > 0)
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(mHorizontalVelocity.normalized, Vector3.up), Time.deltaTime * mTurnLerpRate);
+        }
+    }
+
+    private void UpdateVerticalVelocity()
+    {
+        if (mShouldTryJump && !mIsInAir) 
+        {
+            mVerticalVelocity.y = mJumpSpeed;
+            mAnimator.SetTrigger("Jump");
+            mShouldTryJump = false;
+            return;
+        }
+        //on the ground, set the velocity to a small velocity going down
+        if (mCharacterController.isGrounded) 
+        {
+            mAnimator.ResetTrigger("Jump");
+            mVerticalVelocity.y = -1f;
+            return;
+        }
+
+        //free fall
+        if (mVerticalVelocity.y > -mMaxFallSpeed)
         {
             mVerticalVelocity.y += Physics.gravity.y * Time.deltaTime;
         }
-
-        UpdateHorizontalVelocity();
-
-        mCharacterController.Move((mHorizontalVelocity + mVerticalVelocity) * Time.deltaTime);
     }
 
     void UpdateHorizontalVelocity() 
@@ -99,5 +147,10 @@ public class MovementController : MonoBehaviour
         Vector3 fwdDirection = Vector3.Cross(rightDirection, Vector3.up);
 
         return rightDirection * inputValue.x + fwdDirection * inputValue.y;
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = mIsInAir ? Color.red : Color.green;
+        Gizmos.DrawSphere(transform.position, mAirCheckRadius);
     }
 }
