@@ -1,6 +1,8 @@
 using System.Linq.Expressions;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.iOS;
 
 [RequireComponent(typeof(MovementController))]
 public class Player : MonoBehaviour
@@ -10,6 +12,7 @@ public class Player : MonoBehaviour
     private PlayerInputActions mPlayerInputAction;
     private MovementController mMovementController;
 
+    private BattleState mBattleState;
     CameraRig mCameraRig;
 
     private void Awake()
@@ -39,5 +42,22 @@ public class Player : MonoBehaviour
     private void OnDisable()
     {
         mPlayerInputAction.Disable();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject == gameObject) 
+        {
+            return;
+        }
+        BattlePartyComponent otherBattlePartyComponent = other.GetComponent<BattlePartyComponent>();
+        if (otherBattlePartyComponent && !IsInBattle()) 
+        {
+            //GameMode.MainGameMode.BattleManager.StartBattle(mBattlePartyComponent, otherBattlePartyComponent);
+        }
+    }
+    private bool IsInBattle() 
+    {
+        return mBattleState == BattleState.InBattle;
     }
 }
