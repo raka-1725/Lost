@@ -30,5 +30,7 @@ public class BattleManager
             partyBattleCharacter.transform.rotation = partyBattleSite.transform.rotation;
             i++;
         }
+
+        party.FinishPrep();
     }
 }

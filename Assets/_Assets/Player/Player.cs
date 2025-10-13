@@ -1,11 +1,13 @@
+using System;
 using System.Linq.Expressions;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.iOS;
+using UnityEngine.Rendering.HighDefinition;
 
 [RequireComponent(typeof(MovementController))]
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IViewClient
 {
     [SerializeField] CameraRig mCameraRigPrefab;
 
@@ -56,10 +58,31 @@ public class Player : MonoBehaviour
         if (otherBattlePartyComponent && !IsInBattle()) 
         {
             GameMode.MainGameMode.BattleManager.StartBattle(mBattlePartyComponent, otherBattlePartyComponent);
+            SwitchToBattle(BattleState.InBattle);
         }
     }
+
+    private void SwitchToBattle(BattleState battleState)
+    {
+        if (battleState == BattleState.InBattle) 
+        {
+            mPlayerInputAction.Gameplay.Disable();
+        }
+        if (battleState == BattleState.Roaming) 
+        {
+            mPlayerInputAction.Gameplay.Enable();
+        }
+        
+
+    }
+
     private bool IsInBattle() 
     {
         return mBattleState == BattleState.InBattle;
+    }
+
+    public void SetViewTarget(Transform viewTarget)
+    {
+        mCameraRig.SetFollowTransform(viewTarget);
     }
 }
