@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 
     private PlayerInputActions mPlayerInputAction;
     private MovementController mMovementController;
+    private BattlePartyComponent mBattlePartyComponent;
 
     private BattleState mBattleState;
     CameraRig mCameraRig;
@@ -32,6 +33,7 @@ public class Player : MonoBehaviour
         mPlayerInputAction.Gameplay.Look.performed += (context) => mCameraRig.SetLookInput(context.ReadValue<Vector2>());
         mPlayerInputAction.Gameplay.Look.canceled += (context) => mCameraRig.SetLookInput(context.ReadValue<Vector2>());
 
+        mBattlePartyComponent = GetComponent<BattlePartyComponent>();
     }
 
     private void OnEnable()
@@ -53,7 +55,7 @@ public class Player : MonoBehaviour
         BattlePartyComponent otherBattlePartyComponent = other.GetComponent<BattlePartyComponent>();
         if (otherBattlePartyComponent && !IsInBattle()) 
         {
-            //GameMode.MainGameMode.BattleManager.StartBattle(mBattlePartyComponent, otherBattlePartyComponent);
+            GameMode.MainGameMode.BattleManager.StartBattle(mBattlePartyComponent, otherBattlePartyComponent);
         }
     }
     private bool IsInBattle() 

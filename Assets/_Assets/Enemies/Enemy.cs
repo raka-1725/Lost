@@ -38,7 +38,7 @@ public class Enemy : MonoBehaviour
     }
     void UpdatePlayerPrerception() 
     {
-        Debug.Log("PlayerPerception");
+        //Debug.Log("PlayerPerception");
         Player player = GameMode.MainGameMode.mPlayer;
         if (!player)
         {
@@ -53,14 +53,14 @@ public class Enemy : MonoBehaviour
         if (distanceToPlayer > mSightDistance) 
         {
             Target = null;
-            Debug.Log("too far");
+            //Debug.Log("too far");
             return;
         }
         Vector3 playerDir = (player.transform.position - transform.position).normalized;
         if (Vector3.Angle(playerDir, transform.forward) > mViewAngle) 
         {
             Target = null;
-            Debug.Log("out of angle");
+            //Debug.Log("out of angle");
             return;
         }
         Vector3 eyeViewPoint = transform.position + Vector3.up * mEyeHeight;
@@ -69,7 +69,7 @@ public class Enemy : MonoBehaviour
             if (hitInfo.collider.gameObject != player.gameObject) 
             {
                 Target = null;
-                Debug.Log($"blocked by{hitInfo.collider.gameObject.name}");
+                //Debug.Log($"blocked by{hitInfo.collider.gameObject.name}");
                 return;
             }
         }

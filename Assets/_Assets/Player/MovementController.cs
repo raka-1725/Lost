@@ -75,7 +75,7 @@ public class MovementController : MonoBehaviour
 
         UpdateTransform();
         UpdateAnimation();
-        Debug.Log($"is grounded: {mCharacterController.isGrounded}");
+        //Debug.Log($"is grounded: {mCharacterController.isGrounded}");
     }
 
     private void UpdateAnimation()
