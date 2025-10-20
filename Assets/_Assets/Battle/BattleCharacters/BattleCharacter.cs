@@ -7,6 +7,9 @@ public class BattleCharacter : MonoBehaviour
     [SerializeField] GameObject mTurnIndicator;
     public float CoolDownDuration => 1f / Speed;
     public float CoolDownTimeRemaining { get; private set; }
+
+    public Action<BattleCharacter> onTurnStarted;
+
     public event Action OnTurnFinished;
     private void Awake()
     {
@@ -21,6 +24,7 @@ public class BattleCharacter : MonoBehaviour
     {
         Invoke("FinishTurn", 1);
         mTurnIndicator.SetActive(true);
+        onTurnStarted?.Invoke(this);
         CoolDownTimeRemaining = CoolDownDuration;
     }
 
