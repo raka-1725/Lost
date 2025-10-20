@@ -37,6 +37,7 @@ public class BattlePartyComponent : MonoBehaviour
                 BattleCharacter newBattleCharacter = Instantiate(battleCharacter);
                 newBattleCharacter.onTurnStarted += ChangeViewTo;
                 mBattleCharacters.Add(Instantiate(battleCharacter));
+                mBattleCharacters.Add(newBattleCharacter);
             }
         }
         return mBattleCharacters;
