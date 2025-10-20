@@ -14,6 +14,7 @@ public class Player : MonoBehaviour, IViewClient
 
     private GameplayWidget mGameplayWidget;
 
+
     private PlayerInputActions mPlayerInputAction;
     private MovementController mMovementController;
     private BattlePartyComponent mBattlePartyComponent;
@@ -39,9 +40,14 @@ public class Player : MonoBehaviour, IViewClient
         mPlayerInputAction.Gameplay.Look.canceled += (context) => mCameraRig.SetLookInput(context.ReadValue<Vector2>());
 
         mBattlePartyComponent = GetComponent<BattlePartyComponent>();
+        mBattlePartyComponent.onBattleCharacterInTurn += BattleCharacterTakeInTurn;
         mGameplayWidget = Instantiate(mGameplayWidgetPrefab);
-    }
 
+    }
+    private void BattleCharacterTakeInTurn(BattleCharacter character) 
+    {
+        mGameplayWidget.SetFocusedCharacterInBattle(character);
+    }
     private void OnEnable()
     {
         mPlayerInputAction.Enable();
@@ -84,6 +90,8 @@ public class Player : MonoBehaviour, IViewClient
     {
         Debug.Log($"Dipped to black called");
         mBattlePartyComponent.UpdateView();
+        mGameplayWidget.SwitchToBattle();
+        
     }
 
     private bool IsInBattle() 
