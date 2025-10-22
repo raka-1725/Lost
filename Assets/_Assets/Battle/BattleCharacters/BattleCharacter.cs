@@ -4,6 +4,8 @@ using UnityEngine;
 public class BattleCharacter : MonoBehaviour
 {
     [field: SerializeField] public float Speed { get; private set; } = 1;
+    [field: SerializeField] public string Name { get; private set; } =  "BattleCharacter";
+
     [SerializeField] GameObject mTurnIndicator;
     public float CoolDownDuration => 1f / Speed;
     public float CoolDownTimeRemaining { get; private set; }

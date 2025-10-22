@@ -52,11 +52,12 @@ public class BattleManager : MonoBehaviour
             battleCharacter.OnTurnFinished -= ProcessFirstRound;
             battleCharacter.OnTurnFinished += NextTurn;
         }
+
         NextTurn();
     }
     void NextTurn()
     {
-
+        Debug.Log("Next turn");
         UpdateTurnOrder();
 
         float advanceTime = mBattleCharacters[0].CoolDownTimeRemaining;

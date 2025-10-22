@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class ChildSwitcher : MonoBehaviour
 {
     List<GameObject> mChildGameObjects = new List<GameObject>();
     int mCurrentActiveChildIndex = 0;
-    private void Awake()
+    void Awake()
     {
-        foreach (Transform childTransform in transform) 
+        foreach (Transform childTransform in transform)
         {
             mChildGameObjects.Add(childTransform.gameObject);
         }
@@ -16,18 +15,20 @@ public class ChildSwitcher : MonoBehaviour
         SetActiveChildByIndex(mCurrentActiveChildIndex);
     }
 
-    public void SetActiveChild(GameObject childToSwitchTo) 
+    public void SetActiveChild(GameObject childToSwitchTo)
     {
         int childIndex = mChildGameObjects.FindIndex((x) => { return childToSwitchTo == x; });
+        SetActiveChildByIndex(childIndex);
     }
 
-    public void SetActiveChildByIndex(int newActiveChildIndex) 
+    public void SetActiveChildByIndex(int newActiveChildIndex)
     {
-        if (newActiveChildIndex < 0 || newActiveChildIndex >= mChildGameObjects.Count) 
+        if (newActiveChildIndex < 0 || newActiveChildIndex >= mChildGameObjects.Count)
         {
             return;
         }
-        foreach (GameObject childGameObject in mChildGameObjects) 
+
+        foreach (GameObject childGameObject in mChildGameObjects)
         {
             childGameObject.SetActive(false);
         }
