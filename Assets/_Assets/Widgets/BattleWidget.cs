@@ -31,6 +31,6 @@ public class BattleWidget : MonoBehaviour
     {
         AbilityWidget newAbilityWidget = Instantiate(mAbilityWidgetPrefab, mAbilityListLayoutGroup.transform);
         newAbilityWidget.SetAbility(ability);
-        newAbilityWidget.SetText("NEW ABILITY");
+
     }
 }

@@ -7,18 +7,19 @@ public class AbilityWidget : MonoBehaviour
     
 
     Button mButton;
-    TextMeshProUGUI mText;
+    TextMeshProUGUI mAbilityNameText;
     private void Awake()
     {
         mButton = GetComponent<Button>();
         mButton.onClick.AddListener(ActivateAbility);
 
-        mText = GetComponentInChildren<TextMeshProUGUI>();
+        mAbilityNameText = GetComponentInChildren<TextMeshProUGUI>();
     }
     Ability mAbility;
     public void SetAbility(Ability ability) 
     {
         mAbility = ability;
+        mAbilityNameText.SetText(ability.name);
     }
 
     void ActivateAbility() 
@@ -28,6 +29,6 @@ public class AbilityWidget : MonoBehaviour
 
     public void SetText(string text) 
     {
-        mText.text = text;
+        mAbilityNameText.text = text;
     }
 }
