@@ -13,7 +13,7 @@ public abstract class Ability : ScriptableObject
 
     public virtual void ActivateAbility() 
     {
-        Debug.Log("Acrivating ability");
+        Debug.Log("Acrtivating ability");
     }
     
 }

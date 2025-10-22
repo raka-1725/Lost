@@ -29,7 +29,8 @@ public class BattleWidget : MonoBehaviour
 
     private void AddAbilitytoAbilityList(Ability ability) 
     {
-        AbilityWidget newAbilityWidget = Instantiate(mAbilityWidgetPrefab);
+        AbilityWidget newAbilityWidget = Instantiate(mAbilityWidgetPrefab, mAbilityListLayoutGroup.transform);
         newAbilityWidget.SetAbility(ability);
+        newAbilityWidget.SetText("NEW ABILITY");
     }
 }
