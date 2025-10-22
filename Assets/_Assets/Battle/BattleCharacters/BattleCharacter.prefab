@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7210726813615831043}
   - component: {fileID: -7721100247609638265}
+  - component: {fileID: 6971673951042526279}
   m_Layer: 0
   m_Name: BattleCharacter
   m_TagString: Untagged
@@ -46,7 +47,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Speed>k__BackingField: 1
+  <Name>k__BackingField: BattleCharacter
   mTurnIndicator: {fileID: 3513481088575902474}
+--- !u!114 &6971673951042526279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2236584954250939761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7f15521ac54c374ab836898f46b8414, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialAbilites:
+  - {fileID: 11400000, guid: c7ac7de4f98eea94bbda6cd4b9fefc7d, type: 2}
 --- !u!1 &3513481088575902474
 GameObject:
   m_ObjectHideFlags: 0

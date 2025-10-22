@@ -46,3 +46,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mSiteRadius: 0
   mSiteCapacity: 0
+  mIsPlayerSite: 0

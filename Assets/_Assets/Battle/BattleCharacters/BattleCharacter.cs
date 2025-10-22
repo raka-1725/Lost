@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(AbilityComponent))]
 public class BattleCharacter : MonoBehaviour
 {
     [field: SerializeField] public float Speed { get; private set; } = 1;
@@ -12,11 +13,19 @@ public class BattleCharacter : MonoBehaviour
 
     public Action<BattleCharacter> onTurnStarted;
 
+    AbilityComponent mAbilityComponent;
+    public AbilityComponent GetAbilityComponent() 
+    {
+        return mAbilityComponent;
+    }
+
     public event Action OnTurnFinished;
     private void Awake()
     {
         CoolDownTimeRemaining = CoolDownDuration;
         mTurnIndicator.SetActive(false);
+
+        mAbilityComponent = GetComponent<AbilityComponent>();
     }
     public void CoolDownSubtract(float duration) 
     {
