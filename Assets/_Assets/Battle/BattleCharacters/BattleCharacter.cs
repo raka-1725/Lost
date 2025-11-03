@@ -39,9 +39,14 @@ public class BattleCharacter : MonoBehaviour
     {
         CoolDownTimeRemaining -= duration;
     }
+    public void SetHighLighted(bool highlighted) 
+    {
+        mTurnIndicator.SetActive(highlighted);
+    }
+
     public void TakeTurn() 
     {
-        //Invoke("FinishTurn", 1);
+        SetHighLighted(true);
         mTurnIndicator.SetActive(true);
         onTurnStarted?.Invoke(this);
         CoolDownTimeRemaining = CoolDownDuration;

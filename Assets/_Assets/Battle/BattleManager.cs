@@ -12,6 +12,11 @@ public class BattleManager : MonoBehaviour , ITargetService
 
     TargetingComponent mTargetingComponent;
 
+    void Awake() 
+    {
+        mTargetingComponent = GetComponent<TargetingComponent>();
+        mTargetingComponent.SetTargetService(this);
+    }
 
     public void StartBattle(BattlePartyComponent playerParty, BattlePartyComponent enemyParty) 
     {

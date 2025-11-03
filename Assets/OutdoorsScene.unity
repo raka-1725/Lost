@@ -3018,6 +3018,7 @@ MonoBehaviour:
   - {fileID: 5873223654087721820, guid: 688ecd5ad33f7e944a275aee5c808ea1, type: 3}
   - {fileID: 5873223654087721820, guid: 688ecd5ad33f7e944a275aee5c808ea1, type: 3}
   - {fileID: 5873223654087721820, guid: 688ecd5ad33f7e944a275aee5c808ea1, type: 3}
+  <PartyID>k__BackingField: 0
 --- !u!1001 &445011587
 PrefabInstance:
   m_ObjectHideFlags: 0
