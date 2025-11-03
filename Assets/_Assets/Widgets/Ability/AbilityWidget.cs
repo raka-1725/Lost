@@ -19,16 +19,11 @@ public class AbilityWidget : MonoBehaviour
     public void SetAbility(Ability ability) 
     {
         mAbility = ability;
-        mAbilityNameText.SetText(ability.name);
+        mAbilityNameText.SetText(ability.AbilityName);
     }
 
     void ActivateAbility() 
     {
         mAbility.ActivateAbility();
-    }
-
-    public void SetText(string text) 
-    {
-        mAbilityNameText.text = text;
     }
 }
