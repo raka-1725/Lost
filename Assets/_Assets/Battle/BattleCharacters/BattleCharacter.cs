@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(AbilityComponent))]
 public class BattleCharacter : MonoBehaviour
 {
+    
     [field: SerializeField] public float Speed { get; private set; } = 1;
     [field: SerializeField] public string Name { get; private set; } =  "BattleCharacter";
 
@@ -14,6 +15,13 @@ public class BattleCharacter : MonoBehaviour
     public Action<BattleCharacter> onTurnStarted;
 
     AbilityComponent mAbilityComponent;
+
+    public int PartyID { get; private set; }
+
+    public void Init(int partyID) 
+    {
+        PartyID = partyID;
+    }
     public AbilityComponent GetAbilityComponent() 
     {
         return mAbilityComponent;

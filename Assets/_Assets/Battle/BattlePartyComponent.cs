@@ -12,6 +12,8 @@ public class BattlePartyComponent : MonoBehaviour
     IViewClient mOwnerViewClient;
 
     public event Action<BattleCharacter> onBattleCharacterInTurn;
+
+    [field: SerializeField] public int PartID { get; private set; } = 0;
     private void Awake()
     {
         mOwnerViewClient = GetComponent<IViewClient>();
