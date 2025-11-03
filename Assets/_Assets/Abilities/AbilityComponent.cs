@@ -7,6 +7,10 @@ public class AbilityComponent : MonoBehaviour
     [SerializeField] Ability[] initialAbilites;
     List<Ability> mAbilities = new List<Ability>();
 
+    public int GetPartyID() 
+    {
+        return GetComponent<BattleCharacter>().PartyID;
+    }
     private void Start()
     {
         foreach (Ability initialABility in initialAbilites) 

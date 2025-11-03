@@ -5,10 +5,10 @@ public abstract class Ability : ScriptableObject
 {
     [field: SerializeField] public string AbilityName { get; private set; }
 
-    AbilityComponent mOwningAbilityComponent;
+    public AbilityComponent OwningAbilityComponent { get; private set; }
     internal void Init(AbilityComponent newability)
     {
-        mOwningAbilityComponent = newability;
+        OwningAbilityComponent = newability;
     }
 
     public virtual void ActivateAbility() 
