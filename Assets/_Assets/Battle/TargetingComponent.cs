@@ -15,14 +15,14 @@ public class TargetingComponent : MonoBehaviour
 
     bool bNavigationRest = true;
 
-    private int mTargetIndex = 0;
+    private int mCurrentlySelectedTargetIndex = -1;
 
-    public void SetTargetService(ITargetService targetService) 
+    public void SetTargetService(ITargetService targetService)
     {
         mTargetService = targetService;
     }
 
-    public void StartTargetting(int partyID, bool hostile) 
+    public void StartTargetting(int partyID, bool hostile)
     {
         mBattleInputActions.Enable();
 
@@ -56,36 +56,44 @@ public class TargetingComponent : MonoBehaviour
 
     private void Update()
     {
-        if (mNavigationInput.sqrMagnitude > 0.5 && bNavigationRest) 
+        if (mNavigationInput.sqrMagnitude > 0.5 && bNavigationRest)
         {
             bNavigationRest = false;
             Debug.Log($"Navigating with Input X : {mNavigationInput.x}");
-
-            if (mNavigationInput.x == 1) 
-            {
-                mTargetIndex++;
-                Debug.Log($"TaregetIndex : {mTargetIndex}");
-                mTargets[mTargetIndex].SetHighLighted(true);
-                if (mTargetIndex > mTargets.Count) 
-                {
-                    mTargetIndex = 0;
-                }
-            }
-            if (mNavigationInput.x == -1) 
-            {
-                mTargetIndex--;
-                Debug.Log($"TaregetIndex : {mTargetIndex}");
-                mTargets[mTargetIndex].SetHighLighted(true);
-                if (mTargetIndex < 0)
-                {
-                    mTargetIndex = mTargets.Count;
-                }
-            }
+            NavigateToNextTarget(mNavigationInput.x > 0 ? true : false);
         }
 
-        if (mNavigationInput.sqrMagnitude < 0.25) 
+        if (mNavigationInput.sqrMagnitude < 0.25)
         {
             bNavigationRest = true;
         }
+    }
+
+    void NavigateToNextTarget(bool increment)
+    {
+        int newIndex = mCurrentlySelectedTargetIndex + (increment ? 1 : -1);
+        if (newIndex < 0) 
+        {
+            newIndex = mTargets.Count - 1;
+        }
+
+        if (newIndex >= mTargets.Count)
+        {
+            newIndex = 0;
+        }
+        SetCurrentlySelectedTargetIndex(newIndex);
+    }
+
+    void SetCurrentlySelectedTargetIndex(int newIndex)
+    {
+        if (newIndex < 0 || newIndex >= mTargets.Count) { return; }
+
+        if (mCurrentlySelectedTargetIndex >= 0 && mCurrentlySelectedTargetIndex < mTargets.Count) 
+        {
+            mTargets[mCurrentlySelectedTargetIndex].SetHighLighted(false);
+        }
+
+        mCurrentlySelectedTargetIndex = newIndex;
+        mTargets[mCurrentlySelectedTargetIndex].SetHighLighted(true);
     }
 }
