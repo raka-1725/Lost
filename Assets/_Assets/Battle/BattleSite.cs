@@ -17,9 +17,9 @@ public class BattleSite : MonoBehaviour
         }
 
         float gap = (mSiteRadius * 2) / (mSiteCapacity - 1);
-        Vector3 startigPoint = transform.position - transform.right * mSiteRadius;
+        Vector3 startigPoint = transform.position + transform.right * mSiteRadius;
 
-        return startigPoint + index * gap * transform.right;
+        return startigPoint - index * gap * transform.right;
  
     }
 

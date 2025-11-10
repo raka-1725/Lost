@@ -7,7 +7,6 @@ public class BasicAttack : Ability
     public override void ActivateAbility()
     {
         base.ActivateAbility();
-        int partyID = OwningAbilityComponent.GetPartyID();
-        GameMode.MainGameMode.BattleManager.GetTargetingComponent().StartTargetting(partyID, true);
+        OwningAbilityComponent.StartTargetting(true);
     }
 }

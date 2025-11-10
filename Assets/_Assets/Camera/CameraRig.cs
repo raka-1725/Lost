@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CameraRig : MonoBehaviour
@@ -7,10 +9,23 @@ public class CameraRig : MonoBehaviour
     [SerializeField] Transform mYawTransform;
     [SerializeField] Transform mPitchTransform;
     [SerializeField] float mRotationRate;
-    Transform mFollowTransform;
+
 
     [SerializeField] float mPitchMin = -89f;
     [SerializeField] float mPitchMax = 89f;
+    Transform FollowTransform
+    {
+        get
+        {
+            if (mFollowTransforms.Count > 0)
+            {
+                return mFollowTransforms.Last();
+            }   
+            return null;
+        }
+    }
+
+    List<Transform> mFollowTransforms = new List<Transform>();
 
     Vector2 mLookInput;
 
@@ -19,14 +34,13 @@ public class CameraRig : MonoBehaviour
     {
         mLookInput = lookInput;
     }
-    public void SetFollowTransform(Transform followTransform)
+    public void PushFollowTransform(Transform followTransform)
     {
-        mFollowTransform = followTransform;
+        mFollowTransforms.Add(followTransform);
     }
-
     private void LateUpdate()
     {
-        transform.position = Vector3.Lerp(transform.position, mFollowTransform.position + mHeightOffset * Vector3.up, mFollowLearpRate * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, FollowTransform.position + mHeightOffset * Vector3.up, mFollowLearpRate * Time.deltaTime);
         mYawTransform.rotation *= Quaternion.AngleAxis(mLookInput.x * mRotationRate * Time.deltaTime, Vector3.up);
 
         mPitch = mPitch + mRotationRate * Time.deltaTime * mLookInput.y;
@@ -39,4 +53,10 @@ public class CameraRig : MonoBehaviour
         mPitch = 0f;
         mYawTransform.localRotation = Quaternion.identity;
     }
+
+    internal void PopFollowTransform(Transform viewTarget) 
+    {
+        mFollowTransforms.Remove(viewTarget);
+    }
 }
+

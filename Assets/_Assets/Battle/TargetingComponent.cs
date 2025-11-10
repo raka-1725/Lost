@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,6 +18,9 @@ public class TargetingComponent : MonoBehaviour
 
     private int mCurrentlySelectedTargetIndex = -1;
 
+    public event Action<BattleCharacter> onTargetPicked;
+    public event Action onTargetCancelled;
+
     public void SetTargetService(ITargetService targetService)
     {
         mTargetService = targetService;
@@ -28,7 +32,7 @@ public class TargetingComponent : MonoBehaviour
 
         mTargets.Clear();
         mTargets = mTargetService.GetTargetForTeam(partyID, hostile);
-        mTargets[0].SetHighLighted(true);
+        SetCurrentlySelectedTargetIndex(0);
     }
 
     private void Awake()
@@ -36,9 +40,37 @@ public class TargetingComponent : MonoBehaviour
         mBattleInputActions = new BattleInputActions();
         mBattleInputActions.Battle.Navigation.performed += HandleTargetNavigation;
         mBattleInputActions.Battle.Navigation.canceled += HandleTargetNavigation;
+        mBattleInputActions.Battle.Cancel.performed += CancelTargeting;
+        mBattleInputActions.Battle.Confirm.performed += ConfirmTarget;
         mBattleInputActions.Disable();
 
     }
+
+    private void ConfirmTarget(InputAction.CallbackContext context)
+    {
+        
+    }
+
+    private void CancelTargeting(InputAction.CallbackContext context)
+    {
+        BattleCharacter battleCharacter = GetCurrentlySelectedTarget();
+        if (battleCharacter) 
+        {
+            battleCharacter.SetHighLighted(false);
+        }
+        onTargetCancelled?.Invoke();
+    }
+
+    BattleCharacter GetCurrentlySelectedTarget() 
+    {
+        if (mCurrentlySelectedTargetIndex >= 0 && mCurrentlySelectedTargetIndex < mTargets.Count) 
+        {
+            return mTargets[mCurrentlySelectedTargetIndex]; 
+        }
+
+        return null;
+    }
+
     private void OnEnable()
     {
         mBattleInputActions.Enable();
@@ -60,7 +92,10 @@ public class TargetingComponent : MonoBehaviour
         {
             bNavigationRest = false;
             Debug.Log($"Navigating with Input X : {mNavigationInput.x}");
-            NavigateToNextTarget(mNavigationInput.x > 0 ? true : false);
+            if (mNavigationInput.x != 0) 
+            {
+                NavigateToNextTarget(mNavigationInput.x > 0 ? true : false);
+            }
         }
 
         if (mNavigationInput.sqrMagnitude < 0.25)

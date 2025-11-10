@@ -34,7 +34,7 @@ public class Player : MonoBehaviour, IViewClient
 
 
         mCameraRig = Instantiate(mCameraRigPrefab);
-        mCameraRig.SetFollowTransform(transform);
+        mCameraRig.PushFollowTransform(transform);
 
         mPlayerInputAction.Gameplay.Look.performed += (context) => mCameraRig.SetLookInput(context.ReadValue<Vector2>());
         mPlayerInputAction.Gameplay.Look.canceled += (context) => mCameraRig.SetLookInput(context.ReadValue<Vector2>());
@@ -99,14 +99,19 @@ public class Player : MonoBehaviour, IViewClient
         return mBattleState == BattleState.InBattle;
     }
 
-    public void SetViewTarget(Transform viewTarget)
+    public void PushViewTarget(Transform viewTarget)
     {
-        mCameraRig.SetFollowTransform(viewTarget);
+        mCameraRig.PushFollowTransform(viewTarget);
         mCameraRig.transform.rotation = viewTarget.transform.rotation;
     }
 
     public void ResetViewAngle()
     {
         mCameraRig.ResetViewAngle();
+    }
+
+    public void PopViewTarget(Transform viewtarget)
+    {
+        mCameraRig.PopFollowTransform(viewtarget);
     }
 }
