@@ -56,7 +56,7 @@ public class CameraRig : MonoBehaviour
 
     internal void PopFollowTransform(Transform viewTarget) 
     {
-        mFollowTransforms.Remove(viewTarget);
+        mFollowTransforms.RemoveAll(target=>viewTarget == target);
     }
 }
 

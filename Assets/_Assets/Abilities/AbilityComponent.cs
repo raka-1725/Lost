@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AbilityComponent : MonoBehaviour
 {
@@ -10,6 +11,15 @@ public class AbilityComponent : MonoBehaviour
 
     IViewClient mOwnerViewClient;
 
+    public event Action onTargetCancelled;
+    public event Action<BattleCharacter> onTargetPicked;
+
+    NavMeshAgent mNavMeshAgent;
+
+    private void Awake()
+    {
+        mNavMeshAgent = GetComponent<NavMeshAgent>();
+    }
     public int GetPartyID() 
     {
         return GetComponent<BattleCharacter>().PartyID;
@@ -31,15 +41,39 @@ public class AbilityComponent : MonoBehaviour
         TargetingComponent targetingComponent = GameMode.MainGameMode.BattleManager.GetTargetingComponent();
         targetingComponent.onTargetCancelled -= CancelTargeting;
         targetingComponent.onTargetCancelled += CancelTargeting;
+        SubscribeToTargetingDelegates();
         targetingComponent.StartTargetting(GetPartyID(), hostile);
+    }
+
+    void SubscribeToTargetingDelegates() 
+    {
+        UnSubscribeToTargettingDelegates();
+        GameMode.MainGameMode.BattleManager.GetTargetingComponent().onTargetCancelled += CancelTargeting;
+        GameMode.MainGameMode.BattleManager.GetTargetingComponent().onTargetPicked += TargetPicked;
+    }
+    void UnSubscribeToTargettingDelegates()
+    {
+        GameMode.MainGameMode.BattleManager.GetTargetingComponent().onTargetCancelled -= CancelTargeting;
+        GameMode.MainGameMode.BattleManager.GetTargetingComponent().onTargetPicked -= TargetPicked;
+    }
+
+    private void TargetPicked(BattleCharacter character)
+    {
+        UnSubscribeToTargettingDelegates();
+        onTargetPicked?.Invoke(character);
     }
 
     private void CancelTargeting()
     {
+        UnSubscribeToTargettingDelegates();
+
         if (mOwnerViewClient is not null) 
         {
             mOwnerViewClient.PopViewTarget(mTargettingFollowTransform);
+
         }
+
+        onTargetCancelled?.Invoke();
     }
 
     private void GiveAbility(Ability abilityDefaultObject) 

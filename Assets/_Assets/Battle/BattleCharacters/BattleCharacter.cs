@@ -1,7 +1,10 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(AbilityComponent))]
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Animator))]
 public class BattleCharacter : MonoBehaviour
 {
     
