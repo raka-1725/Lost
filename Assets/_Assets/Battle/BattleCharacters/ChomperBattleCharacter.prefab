@@ -82,6 +82,14 @@ PrefabInstance:
       propertyPath: <Speed>k__BackingField
       value: 0.8
       objectReference: {fileID: 0}
+    - target: {fileID: 1204010179308857255, guid: 230d00658d90bde46b9f1db5cc7bd4bc, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 6b235da3fba9483458446c3345773542, type: 3}
+    - target: {fileID: 1204010179308857255, guid: 230d00658d90bde46b9f1db5cc7bd4bc, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 8a353fb5188372c4d8c5389dc559112e, type: 2}
     - target: {fileID: 2236584954250939761, guid: 230d00658d90bde46b9f1db5cc7bd4bc, type: 3}
       propertyPath: m_Name
       value: ChomperBattleCharacter

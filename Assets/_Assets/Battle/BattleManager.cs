@@ -98,7 +98,7 @@ public class BattleManager : MonoBehaviour , ITargetService
         int i = 0;
         foreach (BattleCharacter partyBattleCharacter in party.GetBattleCharacters()) 
         {
-            partyBattleCharacter.transform.position = partyBattleSite.GetPositionForUnit(i);
+            partyBattleCharacter.WrapNavPositionTo(partyBattleSite.GetPositionForUnit(i));
             partyBattleCharacter.transform.rotation = partyBattleSite.transform.rotation;
             partyBattleCharacter.OnTurnFinished += ProcessFirstRound;
             mBattleCharacters.Add(partyBattleCharacter);

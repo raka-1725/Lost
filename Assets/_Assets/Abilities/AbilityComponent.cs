@@ -13,8 +13,14 @@ public class AbilityComponent : MonoBehaviour
 
     public event Action onTargetCancelled;
     public event Action<BattleCharacter> onTargetPicked;
+    public event Action onMoveToTargetFinished;
+    public event Action onMoveBackToPartySpotFinished;
+    public event Action<string> onGameplayEventRecieved;
+
 
     NavMeshAgent mNavMeshAgent;
+
+    bool mHasReachedDestination = true;
 
     private void Awake()
     {
@@ -60,7 +66,14 @@ public class AbilityComponent : MonoBehaviour
     private void TargetPicked(BattleCharacter character)
     {
         UnSubscribeToTargettingDelegates();
+
+        if (mOwnerViewClient is not null)
+        {
+            mOwnerViewClient.PopViewTarget(mTargettingFollowTransform);
+        }
+
         onTargetPicked?.Invoke(character);
+
     }
 
     private void CancelTargeting()
@@ -91,5 +104,42 @@ public class AbilityComponent : MonoBehaviour
     internal void SetViewClient(IViewClient viewClient)
     {
         mOwnerViewClient = viewClient;
+    }
+
+    public void MoveToTarget(Vector3 targetPosition) 
+    {
+        mHasReachedDestination = false;
+        mNavMeshAgent.SetDestination(targetPosition);
+    }
+
+    private void Update()
+    {
+        UpdateNavigation();
+    }
+
+    private void UpdateNavigation()
+    {
+        if(mHasReachedDestination)
+            return;
+        if (mNavMeshAgent.pathPending) 
+            return;
+
+        if(mNavMeshAgent.remainingDistance > mNavMeshAgent.stoppingDistance)
+            return;
+        if (!mNavMeshAgent.hasPath || mNavMeshAgent.velocity.sqrMagnitude == 0f) 
+        {
+            mHasReachedDestination = true;
+            onMoveToTargetFinished?.Invoke();
+        }
+    }
+
+    public void HandleGameplayEvent(string eventTag)
+    {
+        onGameplayEventRecieved?.Invoke(eventTag);
+    }
+
+    internal void MoveBackToPartySpot()
+    {
+        
     }
 }

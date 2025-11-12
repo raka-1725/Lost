@@ -19,6 +19,10 @@ public class BattleCharacter : MonoBehaviour
 
     AbilityComponent mAbilityComponent;
 
+    NavMeshAgent mNavMeshAgent;
+
+    Animator mAnimator;
+
     public int PartyID { get; private set; }
 
     public void Init(int partyID, IViewClient viewClient) 
@@ -45,6 +49,13 @@ public class BattleCharacter : MonoBehaviour
         mTurnIndicator.SetActive(false);
 
         mAbilityComponent = GetComponent<AbilityComponent>();
+        mNavMeshAgent = GetComponent<NavMeshAgent>();
+        mAnimator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        mAnimator.SetFloat("Speed", mNavMeshAgent.velocity.magnitude);
     }
     public void CoolDownSubtract(float duration) 
     {
@@ -67,5 +78,15 @@ public class BattleCharacter : MonoBehaviour
     {
         mTurnIndicator.SetActive(false);
         OnTurnFinished?.Invoke();
+    }
+
+    internal void WrapNavPositionTo(Vector3 position)
+    {
+        mNavMeshAgent.Warp(position);
+    }
+
+    internal void TakeDamage(float damageAmount)
+    {
+        
     }
 }

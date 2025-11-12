@@ -16,6 +16,14 @@ PrefabInstance:
       propertyPath: <Speed>k__BackingField
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1204010179308857255, guid: 230d00658d90bde46b9f1db5cc7bd4bc, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: a5674d01884853d4e8f2386a171e14d9, type: 3}
+    - target: {fileID: 1204010179308857255, guid: 230d00658d90bde46b9f1db5cc7bd4bc, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: ba871d4b7f7a12f42842ff107092a05c, type: 2}
     - target: {fileID: 2236584954250939761, guid: 230d00658d90bde46b9f1db5cc7bd4bc, type: 3}
       propertyPath: m_Name
       value: EllenBattleCharacter
