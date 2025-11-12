@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting.AssemblyQualifiedNameParser;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,10 +19,13 @@ public class AbilityComponent : MonoBehaviour
     public event Action onMoveBackToPartySpotFinished;
     public event Action<string> onGameplayEventRecieved;
 
+    Vector3 mPartySpotPosition;
+    Quaternion mPartySpotRotation;
 
     NavMeshAgent mNavMeshAgent;
 
     bool mHasReachedDestination = true;
+    bool mIsMovingBackFinished = true;
 
     private void Awake()
     {
@@ -37,6 +41,9 @@ public class AbilityComponent : MonoBehaviour
         {
             GiveAbility(initialABility);
         }
+
+        mPartySpotPosition = transform.position;
+        mPartySpotRotation = transform.rotation;
     }
 
     public void StartTargetting(bool hostile) 
@@ -116,6 +123,16 @@ public class AbilityComponent : MonoBehaviour
     private void Update()
     {
         UpdateNavigation();
+        if (mHasReachedDestination && !mIsMovingBackFinished) 
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, mPartySpotRotation, Time.deltaTime * 20f);
+            if (Quaternion.Angle(transform.rotation, mPartySpotRotation) < 1f) 
+            {
+                transform.rotation = mPartySpotRotation;
+                mIsMovingBackFinished = true;
+                onMoveBackToPartySpotFinished?.Invoke();
+            }
+        }
     }
 
     private void UpdateNavigation()
@@ -141,6 +158,7 @@ public class AbilityComponent : MonoBehaviour
 
     internal void MoveBackToPartySpot()
     {
-        
+        mIsMovingBackFinished = false;
+        MoveToTarget(mPartySpotPosition);
     }
 }
