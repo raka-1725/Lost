@@ -26,6 +26,7 @@ public class BasicAttack : Ability
 
     private void TargetPicked(BattleCharacter character)
     {
+        mTarget = character;
         OwningAbilityComponent.onTargetPicked -= TargetPicked;
         OwningAbilityComponent.onTargetCancelled -= TargetCancelled;
         Debug.Log($"attacking : {character.gameObject.name}");

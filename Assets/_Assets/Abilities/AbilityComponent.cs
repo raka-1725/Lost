@@ -13,6 +13,7 @@ public class AbilityComponent : MonoBehaviour
 
     public event Action onTargetCancelled;
     public event Action<BattleCharacter> onTargetPicked;
+
     public event Action onMoveToTargetFinished;
     public event Action onMoveBackToPartySpotFinished;
     public event Action<string> onGameplayEventRecieved;
